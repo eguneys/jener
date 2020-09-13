@@ -5,6 +5,11 @@ const regPage = /<!-- #page \b(\w+)\b -->\n([\s\S]*)/;
 const regPage2 = /<!-- #page \b(\w+)\b \b(\w+)\b -->\n([\s\S]*)/;
 
 
+const regPageContent = /<!-- #content \b(\w+)\b -->\n([\s\S]*)/;
+const regPageContentRest = /([\s\S]*)<!-- #content \b\w+\b -->/;
+
+const regHashCommand = /([\s\S]*)<!-- #\b(\w+)\b \b(\w+)\b -->\n([\s\S]*)/;
+
 function jener(defs) {
 
   let layouts = {},
@@ -42,39 +47,121 @@ function jener(defs) {
   }
 
   for (let i = 0; i < pages.length; i+=2) {
-    res.push(pages[i], genPage(ctx, pages[i+1]));
+    res.push(pages[i], genFromPage(ctx, pages[i+1]));
   }
 
   return res;
 }
 
-function genPage(ctx, fsPage) {
+function genFromPage(ctx, fsPage) {
   let res = {
-    res:``
+    res:``,
+    replace: {}
   };
   fsPage.forEach(f => f(ctx, res));
   return res.res;
 }
 
 function layout(layout) {
-  return {
-  };
+  let res = [];
+  
+  let rest = layout;
+
+  let match,
+      secondmatch;
+
+  while (rest.length > 0) {
+    match = rest.match(regHashCommand);
+
+    if (match) {
+      let [_, text, command, argument, _rest] = match;
+
+      if (command === 'content') {
+        res.push(fappend(text));
+        res.push(fcontent(argument));
+      } else if (command === 'include') {
+        // TODO
+      }
+
+      rest = _rest;
+
+    } else {
+      res.push(fappend(rest));
+      break;
+    }
+  }
+  
+  return res;
 }
 
 function mixin(mixin) {
-  return {
-  };
+  return [];
 }
 
 function page(page, layout, replace) {
-  return [
-    fappend(page)
-  ];
+
+  if (!layout) {
+    return [
+      fappend(page)
+    ];
+  }
+
+  let res = [];
+  let rest = page;
+  let match,
+      secondmatch;
+
+  while (rest.length > 0) {
+    match = rest.match(regPageContent);
+
+    if (match) {
+      secondmatch = match[2].match(regPageContentRest);
+
+      if (secondmatch) {
+        res.push(
+          freplace(match[1], secondmatch[1])
+        );
+        rest = secondmatch[2];
+      } else {
+        res.push(
+          freplace(match[1], match[2])
+        );
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+
+  res.push(flayout(layout));
+
+  return res;
 }
 
-function fappend(content) {
+function freplace(content, body) {
   return (ctx, res) => {
-    res.res += content;
+    res.replace[content] = body;
+  };
+}
+
+function fappend(body) {
+  return (ctx, res) => {
+    res.res += body;
+  };
+}
+
+function flayout(layout) {
+  return (ctx, res) => {
+    let { layouts } = ctx;
+    layout = layouts[layout];
+
+    layout.forEach(f => f(ctx, res));
+  };
+}
+
+function fcontent(name) {
+  return (ctx, res) => {
+    res.res += res.replace[name];
   };
 }
 

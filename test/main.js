@@ -1,5 +1,6 @@
 let jener = require('../src/page');
 
+let silentlog = false;//true;
 let failexit = false;
 
 function singlepage() {
@@ -23,12 +24,87 @@ function singlepage() {
         genout, pageOut);  
 }
 
+function singleLayout() {
+  console.log('generates page from layout');
+
+  const layout = `
+<!-- #layout main -->
+<html>
+<body>
+<!-- #content article -->
+</body>
+</html>
+`;
+
+  const page = `
+<!-- #page main -->
+<!-- #content article -->
+<div>
+  Text
+</div>
+`;
+
+  const pageOut = `<html>
+<body>
+<div>
+  Text
+</div>
+</body>
+</html>
+`;
+
+  let [_, genout] = jener(['layout.html', layout,
+                           'page.html', page]);
+
+  equal('output is good',
+        genout, pageOut);   
+}
+
+
+function singleMixin() {
+  console.log('generates page with a mixin');
+
+  const mixin = `
+<!-- #mixin head -->
+<head>
+</head>
+`;
+
+  const page = `
+<!-- #page -->
+<html>
+<!-- #include head -->
+<div>
+  Text
+</div>
+</html>
+`;
+
+  const pageOut = `
+<html>
+<head>
+</head>
+<div>
+  Text
+</div>
+</html>
+`;
+
+  let [_, genout] = jener(['mixin.html', mixin,
+                           'page.html', page]);
+
+  equal('output is good',
+        genout, pageOut);   
+}
+
+
+
 function steps() {
 
   console.log('generates steps page');
 
   const mixin = `
-<!-- #mixin testmixin -->
+<!-- #mixin head -->
 <head>
 </head>
 `;
@@ -71,7 +147,6 @@ function steps() {
   equal('output is good',
         genout, pageOut);
 
-
   const page2 = `
 <!-- #page main -->
 <!-- #content article -->
@@ -94,7 +169,8 @@ function steps() {
   console.log('generate multiple pages');
 
   let [fname1, out1,
-       fname2, out2] =  jener(['page.html', page,
+       fname2, out2] =  jener(['layout.html', layout,
+                               'page.html', page,
                                'page2.html', page2]);
 
   equal('filenames', 
@@ -114,12 +190,17 @@ function equal(msg, a, b) {
     res += a + ' !== ' + b;
     failexit = true;
   }
+  if (silentlog) {
+    return;
+  }
   console.log(res);
 }
 
 (() => {
-  singlepage();
-  steps();
+  //singlepage();
+  // singleLayout();
+  singleMixin();
+  // steps();
 
   process.exit(failexit ? 1 : 0);
 })();

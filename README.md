@@ -61,6 +61,9 @@ mix-in named `mymixin` is defined with `#mixin` command inside an html comment:
 ```html
 <!-- #mixin mymixin -->
 ```
+
+mix-ins cannot include other mix-ins.
+
 layout named `main` is defined the same:
 ```html
 <!-- #layout main -->
