@@ -95,7 +95,7 @@ function layout(layout) {
 }
 
 function mixin(mixin) {
-  return [];
+  return mixin;
 }
 
 function page(page, layout, replace) {
@@ -111,7 +111,23 @@ function page(page, layout, replace) {
   let match,
       secondmatch;
 
+  if (replace) {
+    secondmatch = rest.match(regPageContentRest);
+
+    if (secondmatch) {
+      res.push(
+        freplace(replace, secondmatch[1])
+      );
+      rest = secondmatch[2];
+    } else {
+      res.push(
+        freplace(replace, rest)
+      );
+    }
+  }
+
   while (rest.length > 0) {
+
     match = rest.match(regPageContent);
 
     if (match) {
@@ -146,6 +162,12 @@ function freplace(content, body) {
 
 function fappend(body) {
   return (ctx, res) => {
+    let { mixins } = ctx;
+
+    for (let mixin in mixins) {
+      body = body.replace(`<!-- #include ${mixin} -->`, mixins[mixin]);
+    }
+
     res.res += body;
   };
 }
@@ -161,7 +183,7 @@ function flayout(layout) {
 
 function fcontent(name) {
   return (ctx, res) => {
-    res.res += res.replace[name];
+    fappend(res.replace[name])(ctx, res);
   };
 }
 

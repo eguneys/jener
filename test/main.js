@@ -24,6 +24,41 @@ function singlepage() {
         genout, pageOut);  
 }
 
+function singleLayoutShort() {
+  console.log('generates page from layout short');
+
+  const layout = `
+<!-- #layout main -->
+<html>
+<body>
+<!-- #content article -->
+</body>
+</html>
+`;
+
+  const page = `
+<!-- #page main article -->
+<div>
+  Text
+</div>
+`;
+
+  const pageOut = `<html>
+<body>
+<div>
+  Text
+</div>
+</body>
+</html>
+`;
+
+  let [_, genout] = jener(['layout.html', layout,
+                           'page.html', page]);
+
+  equal('output is good',
+        genout, pageOut);   
+}
+
 function singleLayout() {
   console.log('generates page from layout');
 
@@ -67,8 +102,7 @@ function singleMixin() {
   const mixin = `
 <!-- #mixin head -->
 <head>
-</head>
-`;
+</head>`;
 
   const page = `
 <!-- #page -->
@@ -80,8 +114,7 @@ function singleMixin() {
 </html>
 `;
 
-  const pageOut = `
-<html>
+  const pageOut = `<html>
 <head>
 </head>
 <div>
@@ -106,15 +139,14 @@ function steps() {
   const mixin = `
 <!-- #mixin head -->
 <head>
-</head>
-`;
+</head>`;
 
   const layout = `
 <!-- #layout main -->
 <html>
 <!-- #include head -->
 <body>
-  <!-- #content article -->
+<!-- #content article -->
 </body>
 </html>
 `;
@@ -127,13 +159,13 @@ function steps() {
 `;
 
   const pageOut = `<html>
-  <head>
-  </head>
-  <body>
-    <div>
-     Text
-    </div>
-  </body>
+<head>
+</head>
+<body>
+<div>
+  Text
+</div>
+</body>
 </html>
 `;
 
@@ -147,7 +179,8 @@ function steps() {
   equal('output is good',
         genout, pageOut);
 
-  const page2 = `
+  function multiplePages() {
+    const page2 = `
 <!-- #page main -->
 <!-- #content article -->
 <div>
@@ -155,30 +188,34 @@ function steps() {
 </div>
 `;
 
-  const page2Out = `<html>
-  <head>
-  </head>
-  <body>
-    <div>
-     Text
-    </div>
-  </body>
+    const page2Out = `<html>
+<head>
+</head>
+<body>
+<div>
+  Text
+</div>
+</body>
 </html>
 `;  
 
-  console.log('generate multiple pages');
+    console.log('generate multiple pages');
 
-  let [fname1, out1,
-       fname2, out2] =  jener(['layout.html', layout,
-                               'page.html', page,
-                               'page2.html', page2]);
+    let [fname1, out1,
+         fname2, out2] =  jener(['mixins.html', mixin,
+                                 'layout.html', layout,
+                                 'page.html', page,
+                                 'page2.html', page2]);
 
-  equal('filenames', 
-        fname1 + fname2, 'page.htmlpage2.html');
+    equal('filenames', 
+          fname1 + fname2, 'page.htmlpage2.html');
 
-  equal('output1', out1, pageOut);
-  equal('output2', out2, page2Out);
+    equal('output1', out1, pageOut);
+    equal('output2', out2, page2Out);
+  }
 
+  multiplePages();
+  
 }
 
 function equal(msg, a, b) {
@@ -188,6 +225,14 @@ function equal(msg, a, b) {
   } else {
     res += ' ❌ Fail\n';
     res += a + ' !== ' + b;
+
+    for (let i = 0; i < Math.min(a.length, b.length); i++) {
+      if (a[i] !== b[i]) {
+        res += `\ni:${i} ${a[i]} !== ${b[i]}`;
+        break;
+      }
+    }
+
     failexit = true;
   }
   if (silentlog) {
@@ -199,8 +244,10 @@ function equal(msg, a, b) {
 (() => {
   //singlepage();
   // singleLayout();
-  singleMixin();
-  // steps();
+  // singleMixin();
+  // singleLayoutShort();
+  steps();
+  
 
   process.exit(failexit ? 1 : 0);
 })();
