@@ -1,10 +1,9 @@
 function jenerate(ctx, page) {
   let {
     mixins,
-    layouts,
-    pages
+    layouts
   } = ctx;
-  let rawPage = pages[page];
+
   return `
 <html>
 Not implemented

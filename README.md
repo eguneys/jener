@@ -1,6 +1,5 @@
-## Jener 
+## Jener [![Build Status](https://travis-ci.com/eguneys/jener.svg?branch=master)](https://travis-ci.com/eguneys/jener)
 
-[![Build Status](https://travis-ci.com/eguneys/jener.svg?branch=master)](https://travis-ci.com/eguneys/jener)
 Bare simple static site generator ever.
 
 1. Define a mix-in:
@@ -23,16 +22,16 @@ Bare simple static site generator ever.
 </html>
 ```
 
-3. Define final page using the layout:
+3. Define a page using the layout:
 
 ```html
-<!-- #page mypage main article -->
+<!-- #page main article -->
 <div>
   Text
 </div>
 ```
 
-4. Run `jener` and, it generates the output file:
+4. Run `jener` and, it generates the output file for the page:
 
 ```html
 <html>
@@ -46,13 +45,13 @@ Bare simple static site generator ever.
 </html>
 ```
 
-It has only 2 features, mix-in and layout, to generate a page.
+It has only 2 features, mix-in and layout, to generate pages.
 
 I asked [this question](https://stackoverflow.com/questions/63865108/how-to-code-a-simple-static-page-generator) on Stackoverflow which ended up deleted.
 
 ### Usage
 
-In a folder, put all your layouts mix-in and page definitions, in separate `html` files.
+In a folder, put all your layout, mix-in and page definitions, in separate `html` files.
 
 Then `cd` into the folder and run `jener outputdirectory`. This will generate all your page definitions into the `outputdirectory`.
 
@@ -75,24 +74,27 @@ A layout defines area (named `article`) to replace with content with `#content` 
 <!-- #content article -->
 ```
 
-A page is defined with a `#page` command. Pages don't have to have a layout and can use mix-ins:
+A page is defined with a `#page` command. Pages might not have a layout and can use mix-ins:
 ```html
-<!-- #page mypage -->
+<!-- #page -->
 ```
-A page with a `main` layout, named `mypage`, is defined as:
+
+Pages don't have a name. All pages are exported with the same name as their definition file.
+
+A page with a `main` layout, is defined as:
 ```html
-<!-- #page mypage main -->
+<!-- #page main -->
 ```
 page with a layout must specify which area to replace from the layout.
 ```html
-<!-- #page mypage main -->
+<!-- #page main -->
 <!-- #content article -->
 ```
 That, replaces `#article` area.
 
 There is a shorthand for above two commands:
 ```html
-<!-- #page mypage main article -->
+<!-- #page main article -->
 ```
 
 A layout can define multiple area's to be replaced and page can specify multiple areas to replace from the layout.
