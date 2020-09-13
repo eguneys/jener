@@ -1,5 +1,6 @@
-## Jener
+## Jener 
 
+[![Build Status](https://travis-ci.com/eguneys/jener.svg?branch=master)](https://travis-ci.com/eguneys/jener)
 Bare simple static site generator ever.
 
 1. Define a mix-in:
