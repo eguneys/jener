@@ -4,39 +4,46 @@ Bare simple static site generator ever.
 
 1. Define a mix-in:
 
-    <!-- #mixin mymixin -->
-    <head>
-    </head>
+```html
+<!-- #mixin mymixin -->
+<head>
+</head>
+```
 
 2. Define a layout and use the mixin:
 
-    <!-- #layout main -->
-    <html>
-    <!-- #include head -->
-    <body>
-      <!-- #content article -->
-    </body>
-    </html>
+```html
+<!-- #layout main -->
+<html>
+<!-- #include head -->
+<body>
+  <!-- #content article -->
+</body>
+</html>
+```
 
 3. Define final page using the layout:
 
-    <!-- #page mypage main article -->
-    <div>
-      Text
-    </div>
+```html
+<!-- #page mypage main article -->
+<div>
+  Text
+</div>
+```
 
 4. Run `jener` and, it generates the output file:
 
-   <html>
-     <head>
-     </head>
-     <body>
-       <div>
-        Text
-       </div>
-     </body>
-   </html>
-    
+```html
+<html>
+  <head>
+  </head>
+  <body>
+    <div>
+     Text
+    </div>
+  </body>
+</html>
+```
 
 It has only 2 features, mix-in and layout, to generate a page.
 
@@ -51,39 +58,40 @@ Then `cd` into the folder and run `jener outputdirectory`. This will generate al
 ### Details
 
 mix-in named `mymixin` is defined with `#mixin` command inside an html comment:
-    <!-- #mixin mymixin -->
-
+```html
+<!-- #mixin mymixin -->
+```
 layout named `main` is defined the same:
-
-    <!-- #layout main -->
-
+```html
+<!-- #layout main -->
+```
 mix-in's are included with a #include command:
-
-    <!-- #include head -->
-
+```html
+<!-- #include head -->
+```
 a layout defines area (named `article`) to replace with content with `#content` command:
-
-    <!-- #content article -->
-
+```html
+<!-- #content article -->
+```
 a page is defined with a #page command. Pages don't have to have a layout and can use mix-ins:
-
-    <!-- #page mypage -->
-
+```html
+<!-- #page mypage -->
+```
 a page with a `main` layout, named `mypage`, is defined as:
-
-    <!-- #page mypage main -->
-
+```html
+<!-- #page mypage main -->
+```
 page with a layout must specify which area to replace from the layout.
-
-    <!-- #page mypage main -->
-    <!-- #content article -->
-
+```html
+<!-- #page mypage main -->
+<!-- #content article -->
+```
 replaces `#article` area.
 
 There is a shorthand for above two commands:
-
-    <!-- #page mypage main article -->
-
+```html
+<!-- #page mypage main article -->
+```
 All page definitions export into a separate html file.
 Output filename is the same as the filename of the page definition.
 
