@@ -1,0 +1,23 @@
+{
+  "name": "jener",
+  "version": "1.0.0",
+  "description": "https://stackoverflow.com/questions/63865108/how-to-code-a-simple-static-page-generator",
+  "repository": "https://github.com/eguneys/jener",
+  "author": "eguneys",
+  "license": "MIT",
+  "keywords": [
+    "static",
+    "site",
+    "generator"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/main.js",
+    "compile": "babel src --out-dir ./",
+    "prepublish": "yarn run compile"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6"
+  }
+}
