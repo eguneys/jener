@@ -15,7 +15,7 @@ Bare simple static site generator ever.
 ```html
 <!-- #layout main -->
 <html>
-<!-- #include head -->
+<!-- #include mymixin -->
 <body>
   <!-- #content article -->
 </body>
@@ -69,15 +69,16 @@ mix-in's are included with a #include command:
 ```html
 <!-- #include head -->
 ```
-a layout defines area (named `article`) to replace with content with `#content` command:
+A layout defines area (named `article`) to replace with content with `#content` command:
 ```html
 <!-- #content article -->
 ```
-a page is defined with a #page command. Pages don't have to have a layout and can use mix-ins:
+
+A page is defined with a `#page` command. Pages don't have to have a layout and can use mix-ins:
 ```html
 <!-- #page mypage -->
 ```
-a page with a `main` layout, named `mypage`, is defined as:
+A page with a `main` layout, named `mypage`, is defined as:
 ```html
 <!-- #page mypage main -->
 ```
@@ -86,13 +87,16 @@ page with a layout must specify which area to replace from the layout.
 <!-- #page mypage main -->
 <!-- #content article -->
 ```
-replaces `#article` area.
+That, replaces `#article` area.
 
 There is a shorthand for above two commands:
 ```html
 <!-- #page mypage main article -->
 ```
+
+A layout can define multiple area's to be replaced and page can specify multiple areas to replace from the layout.
+
 All page definitions export into a separate html file.
 Output filename is the same as the filename of the page definition.
 
-Happy blogging <3
+Happy blogging 💙
