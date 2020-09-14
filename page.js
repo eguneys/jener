@@ -3,9 +3,10 @@ const regMixin = /<!-- #mixin \b(\w+)\b -->\n([\s\S]*)/;
 const regPage0 = /<!-- #page -->\n([\s\S]*)/;
 const regPage = /<!-- #page \b(\w+)\b -->\n([\s\S]*)/;
 const regPage2 = /<!-- #page \b(\w+)\b \b(\w+)\b -->\n([\s\S]*)/;
-const regPageContent = /<!-- #content \b(\w+)\b -->\n([\s\S]*)/;
-const regPageContentNonGreedy = /<!-- #content \b\w+\b -->\n[\s\S]*?(?=<!-- #content|$)/g;
+const regPageContent = /<!-- #content \b(\w+)\b -->\n?([\s\S]*)/;
+const regPageContentNonGreedy = /<!-- #content \b\w+\b -->\n?[\s\S]*?(?=<!-- #content|$)/g;
 const regPageContentRest = /([\s\S]*?)(?=<!-- #content|$)/;
+const regPageContentRestOptionalNl = /([\s\S]*?)(?=\n?<!-- #content|$)/;
 
 function jener(defs) {
   let layouts = {},
@@ -82,7 +83,7 @@ function page(page, layout, replace) {
   let res = [];
 
   if (replace) {
-    let match = page.match(regPageContentRest);
+    let match = page.match(regPageContentRestOptionalNl);
     res.push(freplace(replace, match[1]));
   }
 

@@ -120,4 +120,6 @@ Questions about parsing:
 - https://stackoverflow.com/questions/63876748/how-to-parse-a-string-of-commands-that-appear-multiple-times-into-an-array
 - https://stackoverflow.com/questions/63880636/how-to-get-matched-index-of-a-regex-for-all-occurences
 
+[Become patreon](https://www.patreon.com/eguneys)
+
 Happy blogging 💙

@@ -6,6 +6,7 @@ function readFiles(indir, cb) {
   fs.readdir(indir, (err, files) => {
     if (err) {
       cb(err);
+      return;
     }
 
     let res = [];
@@ -26,43 +27,44 @@ function readFiles(indir, cb) {
 }
 
 function writeFiles(pages, outdir, cb) {
-  let c = 0;
+  let c = 0,
+      w = 0;
 
   for (let i = 0; i < pages.length; i += 2) {
     let filename = pages[i],
         content = pages[i + 1];
     fs.writeFile(`${outdir}/${filename}`, content, err => {
       if (err) {
-        console.log(`Error writing output file ${filename} skipping, ${err.message}`);
+        console.log(`skipping ${filename}, ${err.code}`);
       } else {
         console.log('✓ ' + filename);
+        w++;
       }
 
       c++;
 
       if (c * 2 === pages.length) {
-        cb(null, c);
+        cb(!w, w);
       }
     });
   }
 }
 
-function app() {
-  let indir = process.argv[2];
-  let outdir = process.argv[3];
+function app(indir, outdir) {
   readFiles(indir, (err, defs) => {
     if (err) {
-      throw err;
+      console.error(`${err.code}`);
+      return;
     }
 
     writeFiles(jener(defs), outdir, (err, c) => {
       if (err) {
-        throw err;
+        console.error(`Couldn't write any files`);
+      } else {
+        console.log(`Generated ${c} files.`);
       }
-
-      console.log(`Generated ${c} files.`);
     });
   });
 }
 
-app();
+module.exports = app;
