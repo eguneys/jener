@@ -6,6 +6,8 @@ let failexit = false;
 
 (() => {
 
+  inlineContent();
+
   singlepage();
   singleLayout();
   singleMixin();
@@ -13,11 +15,46 @@ let failexit = false;
   steps();
   multipleContent();
   emptyBodyExample();
-
   exampleexample();
 
   process.exit(failexit ? 1 : 0);
 })();
+
+function inlineContent() {
+
+  console.log('inline content');
+
+const layout = `
+<!-- #layout main -->
+<html>
+  <head><!-- #content header --></head>
+<body>
+<date><!-- #content date --></date>
+</body>
+</html>
+`;
+
+const page = `
+<!-- #page main header -->
+Page Header
+<!-- #content date -->
+September`;
+
+const out = `<html>
+  <head>Page Header</head>
+<body>
+<date>September</date>
+</body>
+</html>
+`;
+
+
+  let [_, genout] = jener(['', layout,
+                           '', page]);
+
+  equal('gen is ok', out, genout);
+
+}
 
 function emptyBodyExample() {
 
@@ -147,8 +184,7 @@ let about = `
   <head>
     <title>Steps Example</title>
 <script src="index.js"></script>
-    <link rel="stylesheet" src="index.css"/>
-  </head>
+    <link rel="stylesheet" src="index.css"/>  </head>
   <body>
     <header>
   Steps Header
@@ -447,8 +483,7 @@ function multipleContent() {
 <body>
 <div>
   Text
-</div>
-</body>
+</div></body>
 </html>
 `;
 

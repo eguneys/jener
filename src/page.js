@@ -6,11 +6,13 @@ const regPage2 = /<!-- #page \b(\w+)\b \b(\w+)\b -->\n([\s\S]*)/;
 
 
 const regPageContent = 
-      /<!-- #content \b(\w+)\b -->\n([\s\S]*)/;
+      /<!-- #content \b(\w+)\b -->\n?([\s\S]*)/;
 const regPageContentNonGreedy = 
-      /<!-- #content \b\w+\b -->\n[\s\S]*?(?=<!-- #content|$)/g;
+      /<!-- #content \b\w+\b -->\n?[\s\S]*?(?=<!-- #content|$)/g;
 const regPageContentRest =
       /([\s\S]*?)(?=<!-- #content|$)/;
+const regPageContentRestOptionalNl =
+      /([\s\S]*?)(?=\n?<!-- #content|$)/;
 
 function jener(defs) {
 
@@ -102,7 +104,7 @@ function page(page, layout, replace) {
   let res = [];
 
   if (replace) {
-    let match = page.match(regPageContentRest);
+    let match = page.match(regPageContentRestOptionalNl);
 
     res.push(
       freplace(replace, match[1])

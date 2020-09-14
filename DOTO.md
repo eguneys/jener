@@ -1,3 +1,4 @@
+- [ ] Signature comment on output
 - [ ] Whitespace
   - [ ] fix adding arbitrary whitespace
   -[ ] spaced include adds space to every line at replace
