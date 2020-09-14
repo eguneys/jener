@@ -218,6 +218,49 @@ function steps() {
   
 }
 
+function multipleContent() {
+
+  console.log('generates page with multiple contents');
+
+  const layout = `
+<!-- #layout main -->
+<html>
+<!-- #content head -->
+<body>
+<!-- #content article -->
+</body>
+</html>
+`;
+
+  const page = `
+<!-- #page main article -->
+<div>
+  Text
+</div>
+<!-- #content head -->
+<head>
+</head>
+`;
+
+  const pageOut = `<html>
+<head>
+</head>
+<body>
+<div>
+  Text
+</div>
+</body>
+</html>
+`;
+
+  let [filename, genout] = jener(['layout.html', layout,
+                                  'page.html', page]);
+
+  equal('output is good',
+        genout, pageOut);
+
+}
+
 function equal(msg, a, b) {
   let res = msg;
   if (a === b) {
@@ -242,11 +285,13 @@ function equal(msg, a, b) {
 }
 
 (() => {
-  //singlepage();
+
+  // singlepage();
   // singleLayout();
   // singleMixin();
   // singleLayoutShort();
-  steps();
+  // steps();
+  multipleContent();
   
 
   process.exit(failexit ? 1 : 0);

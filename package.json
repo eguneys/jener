@@ -1,7 +1,7 @@
 {
   "name": "jener",
   "version": "1.0.0",
-  "description": "https://stackoverflow.com/questions/63865108/how-to-code-a-simple-static-page-generator",
+  "description": "Bare simple static site generator ever.",
   "repository": "https://github.com/eguneys/jener",
   "author": "eguneys",
   "license": "MIT",
@@ -12,6 +12,8 @@
   ],
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "example": "yarn compile && rm -f examples/export && yarn start examples/steps examples/export",
     "test": "node test/main.js",
     "compile": "babel src --out-dir ./",
     "prepublish": "yarn run compile"

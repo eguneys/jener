@@ -118,7 +118,7 @@ function page(page, layout, replace) {
       res.push(
         freplace(replace, secondmatch[1])
       );
-      rest = secondmatch[2];
+      rest.substring(secondmatch[1].length);
     } else {
       res.push(
         freplace(replace, rest)
@@ -133,11 +133,15 @@ function page(page, layout, replace) {
     if (match) {
       secondmatch = match[2].match(regPageContentRest);
 
+      console.log(rest);
+      console.log('rest');
+      console.log(match[2]);
+
       if (secondmatch) {
         res.push(
           freplace(match[1], secondmatch[1])
         );
-        rest = secondmatch[2];
+        rest.substring(secondmatch[1].length);
       } else {
         res.push(
           freplace(match[1], match[2])

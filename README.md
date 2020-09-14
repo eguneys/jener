@@ -31,7 +31,7 @@ Bare simple static site generator ever.
 </div>
 ```
 
-4. Run `jener` and, it generates the output file for the page:
+4. Run `jener in-directory out-directory` and, it generates the output file for the page:
 
 ```html
 <html>
@@ -51,9 +51,11 @@ I asked [this question](https://stackoverflow.com/questions/63865108/how-to-code
 
 ### Usage
 
+Instal `jener` globally using `yarn global jener`.
+
 In a folder, put all your layout, mix-in and page definitions, in separate `html` files.
 
-Then `cd` into the folder and run `jener outputdirectory`. This will generate all your page definitions into the `outputdirectory`.
+Then run `jener in-directory out-directory`. This will generate all your page definitions inside in-directory into the `out-directory`.
 
 ### Details
 
@@ -104,5 +106,11 @@ A layout can define multiple area's to be replaced and page can specify multiple
 
 All page definitions export into a separate html file.
 Output filename is the same as the filename of the page definition.
+
+## Contribute
+
+Install dependencies: `yarn install`.
+Run the tests: `yarn test`.
+Run the examples: `yarn example`.
 
 Happy blogging 💙

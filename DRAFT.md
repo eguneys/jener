@@ -23,3 +23,10 @@
         layout: main,
         replace: { article { append: 'div' } }
     }
+
+
+<!-- #page main -->
+<!-- #content head -->
+<head></head>
+<!-- #content body -->
+<body></body>
