@@ -55,7 +55,7 @@ Instal `jener` globally using `yarn global jener`.
 
 In a folder, put all your layout, mix-in and page definitions, in separate `html` files.
 
-Then run `jener in-directory out-directory`. This will generate all your page definitions inside in-directory into the `out-directory`.
+Then run `jener in-directory out-directory`. This will generate all your page definitions inside `in-directory` into the `out-directory`.
 
 ### Details
 

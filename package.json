@@ -11,6 +11,9 @@
     "generator"
   ],
   "main": "index.js",
+  "bin": {
+    "jener": "./bin/index.js"
+  },
   "scripts": {
     "start": "node index.js",
     "example": "yarn compile && rm -rf examples/export && mkdir examples/export && yarn start examples/steps examples/export",
