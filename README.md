@@ -2,6 +2,8 @@
 
 Bare simple static site generator ever.
 
+See https://eguneys.github.io/ for example using Jener.
+
 1. Define a mix-in:
 
 ```html
