@@ -113,4 +113,9 @@ Install dependencies: `yarn install`.
 Run the tests: `yarn test`.
 Run the examples: `yarn example`.
 
+Questions about parsing: 
+
+- https://stackoverflow.com/questions/63876748/how-to-parse-a-string-of-commands-that-appear-multiple-times-into-an-array
+- https://stackoverflow.com/questions/63880636/how-to-get-matched-index-of-a-regex-for-all-occurences
+
 Happy blogging 💙

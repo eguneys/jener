@@ -13,7 +13,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "example": "yarn compile && rm -f examples/export && yarn start examples/steps examples/export",
+    "example": "yarn compile && rm -rf examples/export && mkdir examples/export && yarn start examples/steps examples/export",
     "test": "node test/main.js",
     "compile": "babel src --out-dir ./",
     "prepublish": "yarn run compile"

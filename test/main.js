@@ -1,7 +1,204 @@
 let jener = require('../src/page');
 
-let silentlog = false;//true;
+let silentlog = false;
 let failexit = false;
+
+
+(() => {
+
+  singlepage();
+  singleLayout();
+  singleMixin();
+  singleLayoutShort();
+  steps();
+  multipleContent();
+  emptyBodyExample();
+
+  exampleexample();
+
+  process.exit(failexit ? 1 : 0);
+})();
+
+function emptyBodyExample() {
+
+  console.log('empty body example');
+
+    let layout = `
+<!-- #layout home -->
+<html>
+  <head>
+    <!-- #include head -->
+    <!-- #content head -->
+  </head>
+  <body>
+    <!-- #include header -->
+
+    <!-- #content body -->
+
+    <!-- #include footer -->
+  </body>
+</html>
+`;
+
+let mixin = `
+<!-- #mixin head -->
+<title>Steps Example</title>
+<script src="index.js"></script>
+`;
+
+let about = `
+<!-- #page home -->
+<!-- #content head -->
+<link rel="stylesheet" src="about.css"/>
+
+<!-- #content body -->
+<section>
+  Steps About Body
+</section>
+`;
+
+let pageOut = `<html>
+  <head>
+    <title>Steps Example</title>
+<script src="index.js"></script>
+    <link rel="stylesheet" src="about.css"/>
+
+  </head>
+  <body>
+    <!-- #include header -->
+
+    <section>
+  Steps About Body
+</section>
+
+    <!-- #include footer -->
+  </body>
+</html>
+`;
+
+  let [_, genOut] = jener(['', layout,
+                           '', mixin,
+                           '', about]);
+
+  equal('output is good',
+        genOut, pageOut);
+}
+
+function exampleexample() {
+
+  console.log('example example');
+  
+  let layout = `
+<!-- #layout home -->
+<html>
+  <head>
+    <!-- #include head -->
+    <!-- #content head -->
+  </head>
+  <body>
+    <!-- #include header -->
+    <!-- #content body -->
+    <!-- #include footer -->
+  </body>
+</html>
+`;
+
+let mixin = `
+<!-- #mixin head -->
+<title>Steps Example</title>
+<script src="index.js"></script>
+`;
+
+let footermixin = `
+<!-- #mixin footer -->
+<footer>
+  Steps Footer
+</footer>
+`;
+
+let headermixin = `
+<!-- #mixin header -->
+<header>
+  Steps Header
+</header>
+`;
+
+  let page = `
+<!-- #page home head -->
+<link rel="stylesheet" src="index.css"/>
+<!-- #content body -->
+<section>
+  Steps Body
+</section>
+`;
+
+let about = `
+<!-- #page home -->
+<!-- #content head -->
+<link rel="stylesheet" src="about.css"/>
+
+<!-- #content body -->
+<section>
+  Steps About Body
+</section>
+`;
+
+  let pageOut = `<html>
+  <head>
+    <title>Steps Example</title>
+<script src="index.js"></script>
+    <link rel="stylesheet" src="index.css"/>
+  </head>
+  <body>
+    <header>
+  Steps Header
+</header>
+    <section>
+  Steps Body
+</section>
+    <footer>
+  Steps Footer
+</footer>
+  </body>
+</html>
+`;
+
+let aboutOut = `<html>
+  <head>
+    <title>Steps Example</title>
+<script src="index.js"></script>
+    <link rel="stylesheet" src="about.css"/>
+
+  </head>
+  <body>
+    <header>
+  Steps Header
+</header>
+    <section>
+  Steps About Body
+</section>
+    <footer>
+  Steps Footer
+</footer>
+  </body>
+</html>
+`;
+
+  let [_, genout, __, genabout] = jener(['', layout,
+                           '', mixin,
+                           '', footermixin,
+                           '', headermixin,
+                           'page.html', page,
+                           'about.html', about]);
+
+  equal('output is good',
+        genout, pageOut);
+
+  equal('about is good',
+        genabout, aboutOut);
+  
+}
+
 
 function singlepage() {
   console.log('generates single page');
@@ -102,7 +299,8 @@ function singleMixin() {
   const mixin = `
 <!-- #mixin head -->
 <head>
-</head>`;
+</head>
+`;
 
   const page = `
 <!-- #page -->
@@ -139,7 +337,8 @@ function steps() {
   const mixin = `
 <!-- #mixin head -->
 <head>
-</head>`;
+</head>
+`;
 
   const layout = `
 <!-- #layout main -->
@@ -267,11 +466,13 @@ function equal(msg, a, b) {
     res += ' ✓ Pass';
   } else {
     res += ' ❌ Fail\n';
-    res += a + ' !== ' + b;
 
     for (let i = 0; i < Math.min(a.length, b.length); i++) {
       if (a[i] !== b[i]) {
-        res += `\ni:${i} ${a[i]} !== ${b[i]}`;
+        res += `\ni:${i} [${a[i]}!=${b[i]}]`;
+        a = a.substring(i-2, i + 20);
+        b = b.substring(i-2, i + 20);
+        res += a + ' !== ' + b;
         break;
       }
     }
@@ -283,16 +484,3 @@ function equal(msg, a, b) {
   }
   console.log(res);
 }
-
-(() => {
-
-  // singlepage();
-  // singleLayout();
-  // singleMixin();
-  // singleLayoutShort();
-  // steps();
-  multipleContent();
-  
-
-  process.exit(failexit ? 1 : 0);
-})();

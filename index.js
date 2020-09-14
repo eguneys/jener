@@ -25,8 +25,26 @@ function readFiles(indir, cb) {
   });
 }
 
-function writeFiles(pages, outdir) {
-  console.log(outdir);
+function writeFiles(pages, outdir, cb) {
+  let c = 0;
+
+  for (let i = 0; i < pages.length; i += 2) {
+    let filename = pages[i],
+        content = pages[i + 1];
+    fs.writeFile(`${outdir}/${filename}`, content, err => {
+      if (err) {
+        console.log(`Error writing output file ${filename} skipping, ${err.message}`);
+      } else {
+        console.log('✓ ' + filename);
+      }
+
+      c++;
+
+      if (c * 2 === pages.length) {
+        cb(null, c);
+      }
+    });
+  }
 }
 
 function app() {
@@ -37,12 +55,12 @@ function app() {
       throw err;
     }
 
-    writeFiles(jener(defs), outdir, err => {
+    writeFiles(jener(defs), outdir, (err, c) => {
       if (err) {
         throw err;
       }
 
-      console.log('Done.');
+      console.log(`Generated ${c} files.`);
     });
   });
 }

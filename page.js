@@ -4,8 +4,8 @@ const regPage0 = /<!-- #page -->\n([\s\S]*)/;
 const regPage = /<!-- #page \b(\w+)\b -->\n([\s\S]*)/;
 const regPage2 = /<!-- #page \b(\w+)\b \b(\w+)\b -->\n([\s\S]*)/;
 const regPageContent = /<!-- #content \b(\w+)\b -->\n([\s\S]*)/;
-const regPageContentRest = /([\s\S]*)<!-- #content \b\w+\b -->/;
-const regHashCommand = /([\s\S]*)<!-- #\b(\w+)\b \b(\w+)\b -->\n([\s\S]*)/;
+const regPageContentNonGreedy = /<!-- #content \b\w+\b -->\n[\s\S]*?(?=<!-- #content|$)/g;
+const regPageContentRest = /([\s\S]*?)(?=<!-- #content|$)/;
 
 function jener(defs) {
   let layouts = {},
@@ -50,34 +50,22 @@ function genFromPage(ctx, fsPage) {
     res: ``,
     replace: {}
   };
-  fsPage.forEach(f => f(ctx, res));
+  fsPage.forEach(f => {
+    f(ctx, res);
+  });
   return res.res;
 }
 
 function layout(layout) {
   let res = [];
-  let rest = layout;
-  let match, secondmatch;
-
-  while (rest.length > 0) {
-    match = rest.match(regHashCommand);
-
-    if (match) {
-      let [_, text, command, argument, _rest] = match;
-
-      if (command === 'content') {
-        res.push(fappend(text));
-        res.push(fcontent(argument));
-      } else if (command === 'include') {// TODO
-      }
-
-      rest = _rest;
-    } else {
-      res.push(fappend(rest));
-      break;
-    }
-  }
-
+  let prematch = layout.match(regPageContentRest);
+  res.push(fappend(prematch[1]));
+  let matchs = layout.match(regPageContentNonGreedy);
+  matchs.forEach(match => {
+    let [_, name, text] = match.match(regPageContent);
+    res.push(fcontent(name));
+    res.push(fappend(text));
+  });
   return res;
 }
 
@@ -90,38 +78,21 @@ function page(page, layout, replace) {
     return [fappend(page)];
   }
 
+  let innerMatch;
   let res = [];
-  let rest = page;
-  let match, secondmatch;
 
   if (replace) {
-    secondmatch = rest.match(regPageContentRest);
-
-    if (secondmatch) {
-      res.push(freplace(replace, secondmatch[1]));
-      rest = secondmatch[2];
-    } else {
-      res.push(freplace(replace, rest));
-    }
+    let match = page.match(regPageContentRest);
+    res.push(freplace(replace, match[1]));
   }
 
-  while (rest.length > 0) {
-    match = rest.match(regPageContent);
+  let matchs = page.match(regPageContentNonGreedy);
 
-    if (match) {
-      secondmatch = match[2].match(regPageContentRest);
-      console.log(secondmatch);
-
-      if (secondmatch) {
-        res.push(freplace(match[1], secondmatch[1]));
-        rest = secondmatch[2];
-      } else {
-        res.push(freplace(match[1], match[2]));
-        break;
-      }
-    } else {
-      break;
-    }
+  if (matchs) {
+    matchs.forEach(match => {
+      let [_, name, body] = match.match(regPageContent);
+      res.push(freplace(name, body));
+    });
   }
 
   res.push(flayout(layout));
@@ -141,7 +112,8 @@ function fappend(body) {
     } = ctx;
 
     for (let mixin in mixins) {
-      body = body.replace(`<!-- #include ${mixin} -->`, mixins[mixin]);
+      let regexStr = `<!-- #include ${mixin} -->\n?`;
+      body = body.replace(new RegExp(regexStr), mixins[mixin]);
     }
 
     res.res += body;
@@ -154,7 +126,9 @@ function flayout(layout) {
       layouts
     } = ctx;
     layout = layouts[layout];
-    layout.forEach(f => f(ctx, res));
+    layout.forEach(f => {
+      f(ctx, res);
+    });
   };
 }
 
