@@ -1,6 +1,6 @@
 {
   "name": "jener",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bare simple static site generator ever.",
   "repository": "https://github.com/eguneys/jener",
   "author": "eguneys",
@@ -10,7 +10,7 @@
     "site",
     "generator"
   ],
-  "main": "index.js",
+  "main": "page.js",
   "bin": {
     "jener": "./bin/index.js"
   },
